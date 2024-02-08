@@ -17,25 +17,25 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "clientes")
-public class Cliente implements Serializable{
-	
+public class Cliente implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "shared_key")
 	private String sharedKey;
-	
+
 	@Column(name = "business_id")
 	private String businessId;
-	
+
 	private String email;
 	private String phone;
-	
+
 	@Column(name = "data_add")
 	@Temporal(TemporalType.DATE)
 	private Date dataAdd;
-	
+
 	@PrePersist
 	public void prePersist() {
 		String[] parts = businessId.toLowerCase().split(" ");
@@ -43,12 +43,10 @@ public class Cliente implements Serializable{
 		String part2 = parts[1];
 		sharedKey = part1.charAt(0) + part2;
 	}
-	
-	
-	
+
 	public Cliente() {
 	}
-	
+
 	public Cliente(Long id, String sharedKey, String businessId, String email, String phone, Date dataAdd) {
 		this.id = id;
 		this.sharedKey = sharedKey;
@@ -62,5 +60,5 @@ public class Cliente implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 }
