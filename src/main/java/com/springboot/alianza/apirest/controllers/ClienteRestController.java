@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.springboot.alianza.apirest.models.entity.Cliente;
 import com.springboot.alianza.apirest.services.IClienteService;
@@ -94,6 +95,12 @@ public class ClienteRestController {
     	log.info("Actualizando cliente con ID: {}", id);
         return new ResponseEntity<Cliente>(clienteService.saveCurrentClient(cliente, id), HttpStatus.CREATED);
 
+    }
+    
+    @GetMapping("/clientes/buscar")
+    public List<Cliente> buscarPorSharedKey(@RequestParam("sharedKey") String sharedKey) {
+    	log.info("Iniciando busqueda por sharedKey");
+        return clienteService.buscarPorSharedKey(sharedKey);
     }
 
     @GetMapping("/clientes/export")

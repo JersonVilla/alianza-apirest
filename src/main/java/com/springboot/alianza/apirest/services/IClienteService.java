@@ -13,5 +13,7 @@ public interface IClienteService {
     public Cliente findById(Long id);
 
     public Cliente saveCurrentClient(Cliente cliente, Long id);
+    
+    List<Cliente> buscarPorSharedKey(String sharedKey);
 
 }

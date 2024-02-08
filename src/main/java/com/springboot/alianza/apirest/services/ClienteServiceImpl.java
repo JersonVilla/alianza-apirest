@@ -68,5 +68,10 @@ public class ClienteServiceImpl implements IClienteService {
 
 		return clienteActual;
 	}
+	
+	public List<Cliente> buscarPorSharedKey(String sharedKey) {
+		log.info("Llamando al método findBySharedKeyContainingIgnoreCase()");
+        return clienteRepository.findBySharedKeyContainingIgnoreCase(sharedKey);
+    }
 
 }
