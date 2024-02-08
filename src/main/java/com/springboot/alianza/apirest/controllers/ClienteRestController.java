@@ -100,7 +100,7 @@ public class ClienteRestController {
     @GetMapping("/clientes/buscar")
     public List<Cliente> buscarPorSharedKey(@RequestParam("sharedKey") String sharedKey) {
     	log.info("Iniciando busqueda por sharedKey");
-        return clienteService.buscarPorSharedKey(sharedKey);
+        return clienteService.searchClientsSharedKey(sharedKey);
     }
 
     @GetMapping("/clientes/export")
