@@ -7,14 +7,14 @@ import com.springboot.alianza.apirest.models.entity.Cliente;
 
 public interface IClienteService {
 
-    public GeneralResponse<ClienteResponseDto> findAll();
+    public GeneralResponse<ClienteResponseDto> findAllCustomer();
 
-    public GeneralResponse<ClienteDto> save(Cliente cliente);
+    public GeneralResponse<ClienteDto> saveCustomer(Cliente cliente);
 
-    public GeneralResponse<ClienteResponseDto> findById(Long id);
+    public GeneralResponse<ClienteResponseDto> findCustomerById(Long id);
 
-    public GeneralResponse<ClienteDto> saveCurrentClient(Cliente cliente, Long id);
+    public GeneralResponse<ClienteDto> updateCustomer(Cliente cliente, Long id);
 
-    public GeneralResponse<ClienteResponseDto> searchClientsSharedKey(String sharedKey);
+    public GeneralResponse<ClienteResponseDto> searchCustomerBySharedKey(String sharedKey);
 
 }

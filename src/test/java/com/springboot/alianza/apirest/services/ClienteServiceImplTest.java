@@ -52,35 +52,35 @@ public class ClienteServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllCustomerTest() {
         List<Cliente> clientes = Arrays.asList(new Cliente(), new Cliente());
         when(clienteRepository.findAll()).thenReturn(clientes);
 
-        GeneralResponse<ClienteResponseDto> response = clienteService.findAll();
+        GeneralResponse<ClienteResponseDto> response = clienteService.findAllCustomer();
 
         assertThat(response.getData()).isNotNull();
         assertThat(response.getData().getClientes()).hasSize(2);
     }
 
     @Test
-    void save() {
+    void saveCustomerTest() {
         Cliente cliente = new Cliente();
         when(clienteRepository.save(cliente)).thenReturn(cliente);
 
-        GeneralResponse<ClienteDto> response = clienteService.save(cliente);
+        GeneralResponse<ClienteDto> response = clienteService.saveCustomer(cliente);
 
         assertThat(response).isNotNull();
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    void findById() {
+    void findCustomerByIdTest() {
         Long id = 1L;
         Cliente cliente = new Cliente();
         cliente.setId(id);
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
 
-        GeneralResponse<ClienteResponseDto> response = clienteService.findById(id);
+        GeneralResponse<ClienteResponseDto> response = clienteService.findCustomerById(id);
 
         assertThat(response.getData()).isNotNull();
         assertThat(response.getData().getClientes()).hasSize(1);
@@ -88,7 +88,7 @@ public class ClienteServiceImplTest {
 
 
     @Test
-    void saveCurrentClient() {
+    void updateCustomerTest() {
         // Given
         Long id = 1L;
         Cliente cliente = new Cliente();
@@ -100,7 +100,7 @@ public class ClienteServiceImplTest {
         when(clienteRepository.save(cliente)).thenReturn(cliente);
 
         // When
-        GeneralResponse<ClienteDto> response = clienteService.saveCurrentClient(cliente, id);
+        GeneralResponse<ClienteDto> response = clienteService.updateCustomer(cliente, id);
 
         // Then
         assertThat(response.getData()).isNotNull();

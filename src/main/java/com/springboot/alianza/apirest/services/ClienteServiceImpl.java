@@ -31,7 +31,7 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public GeneralResponse<ClienteResponseDto> findAll() {
+    public GeneralResponse<ClienteResponseDto> findAllCustomer() {
         log.info("Llamando al método findAll()");
         ClienteResponseDto clienteResponseDto = new ClienteResponseDto(clienteRepository.findAll().stream()
                 .map(cliente -> mapper.map(cliente, ClienteDto.class)).collect(Collectors.toList()));
@@ -40,7 +40,7 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     @Transactional
-    public GeneralResponse<ClienteDto> save(Cliente cliente) {
+    public GeneralResponse<ClienteDto> saveCustomer(Cliente cliente) {
         log.info("Guardando cliente: {}", cliente);
         Cliente clienteGuardado = clienteRepository.save(cliente);
         ClienteDto clienteDto = mapper.map(clienteGuardado, ClienteDto.class);
@@ -48,7 +48,7 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     @Override
-    public GeneralResponse<ClienteResponseDto> findById(Long id) {
+    public GeneralResponse<ClienteResponseDto> findCustomerById(Long id) {
         log.info("Buscando cliente por ID: {}", id);
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Cliente no encontrado"));
@@ -60,12 +60,12 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     @Override
-    public GeneralResponse<ClienteDto> saveCurrentClient(Cliente cliente, Long id) {
+    public GeneralResponse<ClienteDto> updateCustomer(Cliente cliente, Long id) {
         log.info("Actualizando cliente con ID: {}", id);
 
         try {
             log.info("Buscar el cliente por su ID");
-            GeneralResponse<ClienteResponseDto> clienteResponse = findById(id);
+            GeneralResponse<ClienteResponseDto> clienteResponse = findCustomerById(id);
             ClienteResponseDto clienteResponseDto = clienteResponse.getData();
 
             log.info("Verificar si se encontró el cliente");
@@ -81,7 +81,7 @@ public class ClienteServiceImpl implements IClienteService {
             clienteDto.setPhone(cliente.getPhone());
             clienteDto.setDataAdd(cliente.getDataAdd());
 
-            GeneralResponse<ClienteDto> clienteUpdated = save(mapper.map(clienteDto, Cliente.class));
+            GeneralResponse<ClienteDto> clienteUpdated = saveCustomer(mapper.map(clienteDto, Cliente.class));
             log.info("Cliente actualizado correctamente: {}", clienteUpdated);
 
             return new GeneralResponse<>(clienteDto, HttpStatus.CREATED.getReasonPhrase());
@@ -94,7 +94,7 @@ public class ClienteServiceImpl implements IClienteService {
 
 
     @Override
-    public GeneralResponse<ClienteResponseDto> searchClientsSharedKey(String sharedKey) {
+    public GeneralResponse<ClienteResponseDto> searchCustomerBySharedKey(String sharedKey) {
         log.info("Llamando al método findBySharedKeyContainingIgnoreCase()");
         List<Cliente> clientes = clienteRepository.findBySharedKeyContainingIgnoreCase(sharedKey);
 

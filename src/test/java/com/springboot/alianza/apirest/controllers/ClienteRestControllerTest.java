@@ -51,7 +51,7 @@ public class ClienteRestControllerTest {
 		clientes.add(new ClienteDto(1L, "jvillamizar", "Jerson Villamizar", "jvillamizar@gmail.com", "31546507624", new Date()));
 		clientes.add(new ClienteDto(2L, "ogarcia", "Oscar Garcia", "ogarcia@gmail.com", "3154650762", new Date()));
 
-		when(clienteService.findAll()).thenReturn(new GeneralResponse<ClienteResponseDto>(
+		when(clienteService.findAllCustomer()).thenReturn(new GeneralResponse<ClienteResponseDto>(
 				ClienteResponseDto.builder().clientes(clientes).build(), HttpStatus.OK.getReasonPhrase()));
 
 		// Llamar al método del controlador que queremos probar
@@ -71,14 +71,14 @@ public class ClienteRestControllerTest {
 
 
 	@Test
-	void testShow() throws Exception {
+	void show() throws Exception {
 
 		List<ClienteDto> clientes = new ArrayList<>();
 		clientes.add(new ClienteDto(1L, "jvillamizar", "Jerson Villamizar", "jvillamizar@gmail.com", "31546507624", new Date()));
 		ClienteResponseDto clienteResponseDto = new ClienteResponseDto();
 		clienteResponseDto.setClientes(clientes);
 
-		when(clienteService.findById(1L))
+		when(clienteService.findCustomerById(1L))
 				.thenReturn(new GeneralResponse<>(HttpStatus.OK, "OK", ClienteResponseDto.builder().clientes(clientes).build()));
 
 
