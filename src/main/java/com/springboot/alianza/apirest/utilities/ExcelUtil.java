@@ -1,5 +1,6 @@
 package com.springboot.alianza.apirest.utilities;
 
+import com.springboot.alianza.apirest.dto.ClienteDto;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
@@ -8,15 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.springboot.alianza.apirest.models.entity.Cliente;
-
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 public class ExcelUtil {
 
-	public static void exportToExcel(HttpServletResponse response, List<Cliente> listClients) throws IOException {
+	public static void exportToExcel(HttpServletResponse response, List<ClienteDto> listClients) throws IOException {
 		response.setContentType("text/csv");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -31,7 +30,7 @@ public class ExcelUtil {
 
 		csvWriter.writeHeader(csvHeader);
 
-		for (Cliente cliente : listClients) {
+		for (ClienteDto cliente : listClients) {
 			csvWriter.write(cliente, nameMapping);
 		}
 

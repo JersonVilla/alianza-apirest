@@ -1,19 +1,20 @@
 package com.springboot.alianza.apirest.services;
 
-import java.util.List;
-
+import com.springboot.alianza.apirest.dto.ClienteDto;
+import com.springboot.alianza.apirest.dto.GeneralResponse;
+import com.springboot.alianza.apirest.dto.response.ClienteResponseDto;
 import com.springboot.alianza.apirest.models.entity.Cliente;
 
 public interface IClienteService {
 
-    public List<Cliente> findAll();
+    public GeneralResponse<ClienteResponseDto> findAll();
 
-    public Cliente save(Cliente cliente);
+    public GeneralResponse<ClienteDto> save(Cliente cliente);
 
-    public Cliente findById(Long id);
+    public GeneralResponse<ClienteResponseDto> findById(Long id);
 
-    public Cliente saveCurrentClient(Cliente cliente, Long id);
-    
-    List<Cliente> searchClientsSharedKey(String sharedKey);
+    public GeneralResponse<ClienteDto> saveCurrentClient(Cliente cliente, Long id);
+
+    public GeneralResponse<ClienteResponseDto> searchClientsSharedKey(String sharedKey);
 
 }

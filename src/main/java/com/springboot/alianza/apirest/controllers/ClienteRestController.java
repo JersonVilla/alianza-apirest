@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.springboot.alianza.apirest.dto.ClienteDto;
+import com.springboot.alianza.apirest.dto.GeneralResponse;
+import com.springboot.alianza.apirest.dto.response.ClienteResponseDto;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,92 +30,68 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AllArgsConstructor
 @CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
 
-    @Autowired
-    private IClienteService clienteService;
+    private final IClienteService clienteService;
 
-    
+
     @GetMapping("/clientes")
-    public List<Cliente> index() {
-    	log.info("Iniciando método index() para obtener la lista de clientes");
+    public GeneralResponse<ClienteResponseDto> index() {
+
+        log.info("Iniciando método index() para obtener la lista de clientes");
         return clienteService.findAll();
+
     }
 
     @GetMapping("/clientes/{id}")
-    public ResponseEntity<?> show(@PathVariable Long id) {
+    public GeneralResponse<ClienteResponseDto> show(@PathVariable Long id) {
 
-    	log.info("Recuperando cliente con ID: {}", id);
-        Map<String, Object> response = new HashMap<>();
-        Cliente cliente = null;
+        log.info("Recuperando cliente con ID: {}", id);
+        return clienteService.findById(id);
 
-        try {
-            cliente = clienteService.findById(id);
-        } catch (DataAccessException e) {
-        	log.error("Error al recuperar cliente con ID {}: {}", id, e.getMessage());
-            response.put("mensaje", "Error al realizar la consulta en BD");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-        }
-
-        if (cliente == null) {
-        	log.warn("Cliente con ID {} no encontrado", id);
-            response.put("mensaje", "El cliente id: ".concat(id.toString().concat(" no existe en BD")));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-        }
-
-        log.info("Cliente recuperado con éxito: {}", cliente);
-        return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
     }
 
+
     @PostMapping("/clientes")
-    public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente) {
+    public GeneralResponse<ClienteDto> create(@Valid @RequestBody Cliente cliente) {
 
-        Map<String, Object> response = new HashMap<>();
-        Cliente clienteNuevo = null;
+        log.info("Cliente creado con éxito: {}", cliente.getId());
+        return clienteService.save(cliente);
 
-        try {
-            clienteNuevo = clienteService.save(cliente);
-            log.info("Cliente creado con éxito: {}", clienteNuevo.getId());
-        } catch (DataAccessException e) {
-            response.put("mensaje", "Error al realizar el insert en la BD");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            log.error("Error al crear el cliente: {}", e.getMessage(), e);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-        }
-
-        response.put("mensaje", "El cliente se ha creado con exito");
-        response.put("cliente", clienteNuevo);
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/clientes/{id}")
-    public ResponseEntity<Cliente> update(@RequestBody Cliente cliente, @PathVariable Long id) {
+    public GeneralResponse<ClienteDto> update(@RequestBody Cliente cliente, @PathVariable Long id) {
 
-    	log.info("Actualizando cliente con ID: {}", id);
-        return new ResponseEntity<Cliente>(clienteService.saveCurrentClient(cliente, id), HttpStatus.CREATED);
+        log.info("Actualizando cliente con ID: {}", id);
+        return clienteService.saveCurrentClient(cliente, id);
 
     }
-    
+
+
     @GetMapping("/clientes/buscar")
-    public List<Cliente> buscarPorSharedKey(@RequestParam("sharedKey") String sharedKey) {
-    	log.info("Iniciando busqueda por sharedKey");
+    public GeneralResponse<ClienteResponseDto> buscarPorSharedKey(@RequestParam("sharedKey") String sharedKey) {
+
+        log.info("Iniciando búsqueda por sharedKey");
         return clienteService.searchClientsSharedKey(sharedKey);
+
     }
+
 
     @GetMapping("/clientes/export")
     public void exportToCSV(HttpServletResponse response) throws IOException {
-    	
-    	log.info("Iniciando exportación de clientes a CSV");
-    	
-        List<Cliente> listClients = clienteService.findAll();
-        ExcelUtil.exportToExcel(response, listClients);
-        
+
+        log.info("Iniciando exportación de clientes a CSV");
+
+        GeneralResponse<ClienteResponseDto> clients = clienteService.findAll();
+        ExcelUtil.exportToExcel(response, clients.getData().getClientes());
+
         log.info("Exportación de clientes a CSV completada");
-        
+
     }
 
 }
