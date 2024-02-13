@@ -1,17 +1,12 @@
 package com.springboot.alianza.apirest.controllers;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.springboot.alianza.apirest.dto.ClienteDto;
 import com.springboot.alianza.apirest.dto.GeneralResponse;
 import com.springboot.alianza.apirest.dto.response.ClienteResponseDto;
+import com.springboot.alianza.apirest.utilities.Constantes;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +37,7 @@ public class ClienteRestController {
     @GetMapping("/clientes")
     public GeneralResponse<ClienteResponseDto> index() {
 
-        log.info("Iniciando método index() para obtener la lista de clientes");
+        log.info(Constantes.FIND_ALL);
         return clienteService.findAll();
 
     }
@@ -50,7 +45,7 @@ public class ClienteRestController {
     @GetMapping("/clientes/{id}")
     public GeneralResponse<ClienteResponseDto> show(@PathVariable Long id) {
 
-        log.info("Recuperando cliente con ID: {}", id);
+        log.info(Constantes.FIND_BY_ID, id);
         return clienteService.findById(id);
 
     }
@@ -59,7 +54,7 @@ public class ClienteRestController {
     @PostMapping("/clientes")
     public GeneralResponse<ClienteDto> create(@Valid @RequestBody Cliente cliente) {
 
-        log.info("Cliente creado con éxito: {}", cliente.getId());
+        log.info(Constantes.SAVE_CLIENT, cliente.getBusinessId());
         return clienteService.save(cliente);
 
     }
@@ -67,7 +62,7 @@ public class ClienteRestController {
     @PutMapping("/clientes/{id}")
     public GeneralResponse<ClienteDto> update(@RequestBody Cliente cliente, @PathVariable Long id) {
 
-        log.info("Actualizando cliente con ID: {}", id);
+        log.info(Constantes.UPDATE_CLIENT, id);
         return clienteService.saveCurrentClient(cliente, id);
 
     }
@@ -76,7 +71,7 @@ public class ClienteRestController {
     @GetMapping("/clientes/buscar")
     public GeneralResponse<ClienteResponseDto> buscarPorSharedKey(@RequestParam("sharedKey") String sharedKey) {
 
-        log.info("Iniciando búsqueda por sharedKey");
+        log.info(Constantes.SHARED_KEY);
         return clienteService.searchClientsSharedKey(sharedKey);
 
     }
@@ -85,12 +80,12 @@ public class ClienteRestController {
     @GetMapping("/clientes/export")
     public void exportToCSV(HttpServletResponse response) throws IOException {
 
-        log.info("Iniciando exportación de clientes a CSV");
+        log.info(Constantes.EXPORT_CSV);
 
         GeneralResponse<ClienteResponseDto> clients = clienteService.findAll();
         ExcelUtil.exportToExcel(response, clients.getData().getClientes());
 
-        log.info("Exportación de clientes a CSV completada");
+        log.info(Constantes.EXPORT_CSV_COMPLETE);
 
     }
 
