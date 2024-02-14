@@ -25,12 +25,16 @@ public class ClienteRestControllerTest {
 	IClienteService clienteService;
 	@InjectMocks
 	ClienteRestController clienteRestController;
+
+	static final Long ID = 1L;
+	List<ClienteDto> clientes = new ArrayList<>();
+	ClienteResponseDto clienteResponseDto = new ClienteResponseDto();
+
 	@Test
 	void findAllCustomer() {
-		List<ClienteDto> clientes = new ArrayList<>();
 		clientes.add(new ClienteDto(1L, "jvillamizar", "Jerson Villamizar", "jvillamizar@gmail.com", "31546507624", new Date()));
 		clientes.add(new ClienteDto(2L, "ogarcia", "Oscar Garcia", "ogarcia@gmail.com", "3154650762", new Date()));
-		ClienteResponseDto clienteResponseDto = new ClienteResponseDto();
+
 		clienteResponseDto.setClientes(clientes);
 
 		when(clienteService.findAllCustomer())
@@ -47,22 +51,18 @@ public class ClienteRestControllerTest {
 	}
 	@Test
 	void findCustomerById() throws Exception {
-
-		Long Id = 1L;
-		List<ClienteDto> clientes = new ArrayList<>();
-
-		when(clienteService.findCustomerById(1L))
+		when(clienteService.findCustomerById(ID))
 				.thenReturn(new GeneralResponse<>(HttpStatus.OK, "OK", ClienteResponseDto.builder().clientes(clientes).build()));
 
-		GeneralResponse<ClienteResponseDto> response = clienteRestController.findCustomerById(Id);
+		GeneralResponse<ClienteResponseDto> response = clienteRestController.findCustomerById(ID);
 
 		assertEquals(HttpStatus.OK, response.getHttpStatus());
 	}
 	@Test
 	void saveCustomerTest() throws Exception {
 
-		when(clienteService.saveCustomer(new Cliente())).thenReturn(
-				new GeneralResponse<>(HttpStatus.OK, "OK", new ClienteDto()));
+		when(clienteService.saveCustomer(new Cliente()))
+				.thenReturn(new GeneralResponse<>(HttpStatus.OK, "OK", new ClienteDto()));
 
 		GeneralResponse<ClienteDto> response = clienteRestController.saveCustomer(new Cliente());
 
@@ -71,11 +71,10 @@ public class ClienteRestControllerTest {
 
 	@Test
 	void updateCustomer() throws Exception{
-		Long Id = 1L;
-		when(clienteService.updateCustomer(new Cliente(), Id)).thenReturn(
-				new GeneralResponse<>(HttpStatus.OK, "OK", new ClienteDto()));
+		when(clienteService.updateCustomer(new Cliente(), ID))
+				.thenReturn(new GeneralResponse<>(HttpStatus.OK, "OK", new ClienteDto()));
 
-		GeneralResponse<ClienteDto> response = clienteRestController.updateCustomer(new Cliente(), Id);
+		GeneralResponse<ClienteDto> response = clienteRestController.updateCustomer(new Cliente(), ID);
 
 		assertEquals(HttpStatus.OK, response.getHttpStatus());
 	}
