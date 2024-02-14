@@ -30,8 +30,8 @@ import com.springboot.alianza.apirest.models.entity.Cliente;
 import com.springboot.alianza.apirest.services.IClienteService;
 
 @SpringBootTest
-@WebAppConfiguration
 @AutoConfigureMockMvc
+@WebAppConfiguration
 public class ClienteRestControllerTest {
 
 	private final static String URL = "/api/clientes";
@@ -46,7 +46,7 @@ public class ClienteRestControllerTest {
 	ClienteRestController clienteRestController;
 
 	@Test
-	void index() {
+	void findAllCustomer() {
 		List<ClienteDto> clientes = new ArrayList<>();
 		clientes.add(new ClienteDto(1L, "jvillamizar", "Jerson Villamizar", "jvillamizar@gmail.com", "31546507624", new Date()));
 		clientes.add(new ClienteDto(2L, "ogarcia", "Oscar Garcia", "ogarcia@gmail.com", "3154650762", new Date()));
@@ -55,7 +55,7 @@ public class ClienteRestControllerTest {
 				ClienteResponseDto.builder().clientes(clientes).build(), HttpStatus.OK.getReasonPhrase()));
 
 		// Llamar al método del controlador que queremos probar
-		GeneralResponse<ClienteResponseDto> response = clienteRestController.index();
+		GeneralResponse<ClienteResponseDto> response = clienteRestController.findAllCustomer();
 
 		// Verificar que la respuesta no sea nula
 		assertNotNull(response);
@@ -71,7 +71,7 @@ public class ClienteRestControllerTest {
 
 
 	@Test
-	void show() throws Exception {
+	void findCustomerById() throws Exception {
 
 		List<ClienteDto> clientes = new ArrayList<>();
 		clientes.add(new ClienteDto(1L, "jvillamizar", "Jerson Villamizar", "jvillamizar@gmail.com", "31546507624", new Date()));
@@ -92,7 +92,7 @@ public class ClienteRestControllerTest {
 	}
 
 	@Test
-	void create() throws Exception{
+	void saveCustomer() throws Exception{
 		Cliente cliente = buildCliente();
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URL)
@@ -105,7 +105,7 @@ public class ClienteRestControllerTest {
 	}
 
 	@Test
-	void update() throws Exception{
+	void updateCustomer() throws Exception{
 		Cliente cliente = buildCliente();
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL.concat("/1"))

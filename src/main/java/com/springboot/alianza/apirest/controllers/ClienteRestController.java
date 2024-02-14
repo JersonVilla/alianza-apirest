@@ -41,7 +41,7 @@ public class ClienteRestController {
 
 
     @GetMapping("/clientes")
-    public GeneralResponse<ClienteResponseDto> index() {
+    public GeneralResponse<ClienteResponseDto> findAllCustomer() {
 
         log.info(FIND_ALL);
         return clienteService.findAllCustomer();
@@ -49,7 +49,7 @@ public class ClienteRestController {
     }
 
     @GetMapping("/clientes/{id}")
-    public GeneralResponse<ClienteResponseDto> show(@PathVariable Long id) {
+    public GeneralResponse<ClienteResponseDto> findCustomerById(@PathVariable Long id) {
 
         log.info(FIND_BY_ID, id);
         return clienteService.findCustomerById(id);
@@ -58,7 +58,7 @@ public class ClienteRestController {
 
 
     @PostMapping("/clientes")
-    public GeneralResponse<ClienteDto> create(@Valid @RequestBody Cliente cliente) {
+    public GeneralResponse<ClienteDto> saveCustomer(@Valid @RequestBody Cliente cliente) {
 
         log.info(SAVE_CLIENT, cliente.getBusinessId());
         return clienteService.saveCustomer(cliente);
@@ -66,7 +66,7 @@ public class ClienteRestController {
     }
 
     @PutMapping("/clientes/{id}")
-    public GeneralResponse<ClienteDto> update(@RequestBody Cliente cliente, @PathVariable Long id) {
+    public GeneralResponse<ClienteDto> updateCustomer(@RequestBody Cliente cliente, @PathVariable Long id) {
 
         log.info(UPDATE_CLIENT, id);
         return clienteService.updateCustomer(cliente, id);
@@ -75,7 +75,7 @@ public class ClienteRestController {
 
 
     @GetMapping("/clientes/buscar")
-    public GeneralResponse<ClienteResponseDto> buscarPorSharedKey(@RequestParam("sharedKey") String sharedKey) {
+    public GeneralResponse<ClienteResponseDto> searchCustomerBySharedKey(@RequestParam("sharedKey") String sharedKey) {
 
         log.info(SHARED_KEY);
         return clienteService.searchCustomerBySharedKey(sharedKey);

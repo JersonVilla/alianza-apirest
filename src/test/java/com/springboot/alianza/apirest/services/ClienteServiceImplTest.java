@@ -25,8 +25,8 @@ import com.springboot.alianza.apirest.models.entity.Cliente;
 import com.springboot.alianza.apirest.models.repository.IClienteRepository;
 
 @SpringBootTest
-@WebAppConfiguration
 @AutoConfigureMockMvc
+@WebAppConfiguration
 public class ClienteServiceImplTest {
 
     @Mock
