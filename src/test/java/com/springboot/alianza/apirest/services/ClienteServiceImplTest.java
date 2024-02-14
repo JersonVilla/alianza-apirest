@@ -16,28 +16,22 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.springboot.alianza.apirest.models.entity.Cliente;
 import com.springboot.alianza.apirest.models.repository.IClienteRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-@WebAppConfiguration
 public class ClienteServiceImplTest {
 
     @Mock
     private IClienteRepository clienteRepository;
-
     @Mock
     private ModelMapper mapper;
-
     @InjectMocks
     private ClienteServiceImpl clienteService;
-
+    static final Long ID = 1L;
     private Cliente cliente;
 
     @BeforeEach
@@ -75,12 +69,9 @@ public class ClienteServiceImplTest {
 
     @Test
     void findCustomerByIdTest() {
-        Long id = 1L;
-        Cliente cliente = new Cliente();
-        cliente.setId(id);
-        when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.findById(ID)).thenReturn(Optional.of(cliente));
 
-        GeneralResponse<ClienteResponseDto> response = clienteService.findCustomerById(id);
+        GeneralResponse<ClienteResponseDto> response = clienteService.findCustomerById(ID);
 
         assertThat(response.getData()).isNotNull();
         assertThat(response.getData().getClientes()).hasSize(1);
@@ -89,20 +80,12 @@ public class ClienteServiceImplTest {
 
     @Test
     void updateCustomerTest() {
-        // Given
-        Long id = 1L;
-        Cliente cliente = new Cliente();
-        cliente.setId(id);
-        ClienteDto clienteDto = new ClienteDto();
-        clienteDto.setId(id);
-        when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-        when(mapper.map(cliente, ClienteDto.class)).thenReturn(clienteDto);
+        when(clienteRepository.findById(ID)).thenReturn(Optional.of(cliente));
+        when(mapper.map(cliente, ClienteDto.class)).thenReturn(new ClienteDto());
         when(clienteRepository.save(cliente)).thenReturn(cliente);
 
-        // When
-        GeneralResponse<ClienteDto> response = clienteService.updateCustomer(cliente, id);
+        GeneralResponse<ClienteDto> response = clienteService.updateCustomer(cliente, ID);
 
-        // Then
         assertThat(response.getData()).isNotNull();
         assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK);
     }
